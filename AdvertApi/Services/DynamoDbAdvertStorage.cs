@@ -18,7 +18,7 @@ namespace AdvertApi.Services
         public DynamoDbAdvertStorage(IMapper mapper, IAmazonDynamoDB dynamoDb)
         {
             _mapper = mapper;
-            _client = (AmazonDynamoDBClient) dynamoDb;
+            _client = (AmazonDynamoDBClient)dynamoDb;
         }
         public async Task<string> Add(AdvertModel model)
         {
@@ -26,57 +26,57 @@ namespace AdvertApi.Services
             dbModel.Id = Guid.NewGuid().ToString();
             dbModel.CreationDateTime = DateTime.UtcNow;
             dbModel.Status = AdvertStatus.Pending;
-            
-          
-                using (var context = new DynamoDBContext(_client))
-                {
-                    await context.SaveAsync(dbModel);
-                }
-            
+
+
+            using (var context = new DynamoDBContext(_client))
+            {
+                await context.SaveAsync(dbModel);
+            }
+
 
             return dbModel.Id;
         }
-        
+
 
         public async Task Confirm(ConfirmAdvertModel model)
         {
-            
-                using (var context = new DynamoDBContext(_client))
-                {
-                    var record = await context.LoadAsync<AdvertDbModel>(model.Id);
-                    if (record == null)
-                    {
-                        throw new KeyNotFoundException($"A record with Id={model.Id} was not found");
-                    }
 
-                    if (model.Status == AdvertStatus.Active)
-                    {
-                        record.FilePath = model.FilePath;
-                        record.Status = AdvertStatus.Active;
-                        await context.SaveAsync(record);
-                    }
-                    else
-                    {
-                        await context.DeleteAsync(record);
-                    }
+            using (var context = new DynamoDBContext(_client))
+            {
+                var record = await context.LoadAsync<AdvertDbModel>(model.Id);
+                if (record == null)
+                {
+                    throw new KeyNotFoundException($"A record with Id={model.Id} was not found");
                 }
-            
+
+                if (model.Status == AdvertStatus.Active)
+                {
+                    record.FilePath = model.FilePath;
+                    record.Status = AdvertStatus.Active;
+                    await context.SaveAsync(record);
+                }
+                else
+                {
+                    await context.DeleteAsync(record);
+                }
+            }
+
         }
 
         public async Task<bool> CheckHealthAsync()
         {
-            
-                var request = new ListTablesRequest
-                {
-                    Limit = 10
-                };
-                var response = await _client.ListTablesAsync(request);
-                var results = response.TableNames;
-                var tableData = await _client.DescribeTableAsync("adverts");
-                return string.Compare(tableData.Table.TableStatus, "active", true) == 0;
-            
+
+            var request = new ListTablesRequest
+            {
+                Limit = 10
+            };
+            var response = await _client.ListTablesAsync(request);
+            var results = response.TableNames;
+            var tableData = await _client.DescribeTableAsync("adverts");
+            return string.Compare(tableData.Table.TableStatus, "active", true) == 0;
+
         }
-        
+
         public async Task<List<AdvertModel>> GetAllAsync()
         {
             using (var client = new AmazonDynamoDBClient())
@@ -89,7 +89,7 @@ namespace AdvertApi.Services
                 }
             }
         }
-        
+
         public async Task<AdvertModel> GetByIdAsync(string id)
         {
             using (var client = new AmazonDynamoDBClient())
