@@ -1,3 +1,5 @@
+using AdvertApi.HealthChecks;
+using AdvertApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,8 +25,10 @@ namespace AdvertApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddTransient<IAdvertStorageService, DynamoDbAdvertStorage>();
             services.AddControllersWithViews();
+            services.AddHealthChecks().AddCheck<StorageHealthCheck>("Storage");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,11 +51,15 @@ namespace AdvertApi
 
             app.UseAuthorization();
 
+            //app.UseHealthChecks("/health");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHealthChecks("/health");
+
             });
         }
     }

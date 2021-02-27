@@ -11,6 +11,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.5.4.29" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.5.1.44" />
+    <PackageReference Include="kibria.AdvertApi.Models" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="5.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Abdus Salam Azad</Authors>
+    <Product>AdvertApi.Models Microservices</Product>
+    <RepositoryUrl>https://github.com/kibria06cse/WebAdvert.AdvertApi</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/kibria06cse/WebAdvert.AdvertApi</PackageProjectUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AssemblyName>kibria.AdvertApi.Models</AssemblyName>
+  </PropertyGroup>
+
+</Project>
